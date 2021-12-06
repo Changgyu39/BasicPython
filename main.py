@@ -1,6 +1,5 @@
+import pickle
 # key = item 이름, value = 수량 
-inventory = {}
-
 # Todolist 1
 # 1. 아이템 추가시 수량도 인자로 받음
 # 2. inventory 전역함수인데, 인자로 받아서 처리하기
@@ -77,7 +76,28 @@ def use_item(inventory):
 
 # Todolist 3
 # 캐릭터 만들기
-character = {}
+# try 사용해 보기
+'''
+try:
+    load_file = open("game_save.p","rb")
+    character = pickle.load(load_file)
+    load_file.close()
+    print("저장된 파일을 읽어왔습니다.")
+except:
+    print("읽어올 파일이 없습니다.")
+    chracter = {}
+'''
+import os
+
+if os.path.isfile("game_save.p"):
+    load_file = open("game_save.p","rb")
+    character = pickle.load(load_file)
+    load_file.close()
+    print("저장된 파일을 읽어왔습니다.")
+else:
+    print("읽어올 파일이 없습니다.")
+    chracter = {}
+    
 select_character = None
 def new_character(name, t_character):
     if check_character(name, t_character):
@@ -90,7 +110,7 @@ def check_character(name, t_character):
     return name in t_character
 
 def print_characterMenu():
-    print("0. 끝내기")
+    print("0. 저장하고 끝내기")
     print("1. 캐릭터 추가")
     print("2. 캐릭터 이름출력")
     print("3. 캐릭터 선택")
@@ -100,6 +120,10 @@ while True:
     print_characterMenu()
     option = int(input("메뉴를 선택해주세요.)"))
     if option == 0:
+        save_file = open("game_save.p", "wb")
+        pickle.dump(character, save_file)
+        save_file.close()
+        print("게임 내용이 되었습니다.")
         print("종료되었습니다.")
         break
     elif option == 1:
@@ -127,9 +151,6 @@ while True:
             inventory = character[select_character]
             use_item(inventory)
             
-# 캐릭터 이름으로 식별
-# 캐릭터 인벤토리
-# 캐릭터 장착기능 
 
 
 
